@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Login</title>
+  <link rel="stylesheet" href="{% static 'todoapp/css/styles.css' %}">
+</head>
+<body>
+  <main style="display:flex;flex-direction:column;align-items:center;gap:1rem;padding-top:4rem;">
+    <h1>Sign in</h1>
+    <form id="loginForm" style="display:flex;flex-direction:column;gap:.5rem;width:300px;">
+      <input id="username" placeholder="Username" required />
+      <input id="password" type="password" placeholder="Password" required />
+      <button type="submit">Login</button>
+    </form>
+    <p id="loginError" style="color:salmon"></p>
+  </main>
+
+  <script src="{% static 'todoapp/js/login.js' %}"></script>
+</body>
+</html>
