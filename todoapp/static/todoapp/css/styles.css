@@ -1,4 +1,3 @@
-/* ===== RESET & BASE ===== */
 * {
   margin: 0;
   padding: 0;
@@ -6,231 +5,197 @@
 }
 
 body {
-  background: linear-gradient(135deg, #5a7bd0 0%, #3b4b8f 100%);
-  background-attachment: fixed;
-  color: #fff;
+  background-image: url('../images/bg-gif.gif');
+  background-size: cover;
+  color: white;
   font-family: "Poppins", sans-serif;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
-/* ===== HEADER ===== */
 header {
-  font-size: 2rem;
-  font-weight: 600;
-  text-align: center;
-  margin-top: 3rem;
-  letter-spacing: 1px;
+  font-size: 1.5rem;
 }
 
-/* ===== FORM ===== */
+header, 
 form {
+  min-height: 20vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 2rem 0;
-  gap: 0.7rem;
 }
 
-form input {
-  width: 280px;
-  padding: 0.8rem 1.2rem;
-  font-size: 1.1rem;
+form input, 
+form button {
+  padding: 0.5rem;
+  padding-left: 1rem;
+  font-size: 1.2rem;
   border: none;
-  border-radius: 50px;
-  background: #f7f8fa;
-  box-shadow: inset 2px 2px 5px #cdd3e2, inset -2px -2px 5px #ffffff;
-  outline: none;
-  transition: all 0.3s ease;
-}
-
-form input:focus {
-  box-shadow: 0 0 0 3px rgba(173, 200, 255, 0.6);
+  background: white;
+  border-radius: 2rem;
 }
 
 form button {
-  padding: 0.8rem 1.4rem;
-  border: none;
-  border-radius: 50px;
-  background: #f7f8fa;
-  color: #4b6cb7;
-  font-size: 1.2rem;
-  font-weight: 600;
+  color: #87a0cd;
+  background: white;
   cursor: pointer;
-  box-shadow: 2px 2px 5px #cdd3e2, -2px -2px 5px #ffffff;
-  transition: all 0.3s ease;
+  transition: all 0.3 ease;
+  margin-left: 0.5rem;
 }
 
 form button:hover {
-  background: #4b6cb7;
-  color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(75, 108, 183, 0.3);
+  color: white;
+  background: #afcbff;
 }
 
-/* ===== CLEAR ALL BUTTON ===== */
-.clear-all-btn {
-  font-size: 1rem;
-  background: transparent;
-  color: #e0e6ff;
-  border: none;
-  cursor: pointer;
-  margin-left: 0.5rem;
-  transition: color 0.3s ease;
+.clear-all-btn{
+  font-size: 1.1rem;
+  padding-left: 8px;
 }
 
-.clear-all-btn:hover {
-  color: #ffffff;
+.fa-plus-circle {
+  margin-top: 0.3rem;
+  margin-left: -8px;
 }
 
-/* ===== TODO LIST ===== */
 .todo-container {
   display: flex;
   justify-content: center;
-  width: 100%;
+  align-items: center;
 }
 
 .todo-list {
-  min-width: 35%;
+  min-width: 30%;
   list-style: none;
 }
 
 .todo {
-  margin: 0.8rem 0;
-  padding: 0.7rem 1rem;
-  background: #ffffff;
-  color: #333;
+  margin: 0.5rem;
+  padding-left: 0.5rem;
+  background: #f9fbf2;
+  color: black;
   font-size: 1.1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-radius: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease, box-shadow 0.3s ease;
-}
-
-.todo:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  transition: 0.5s;
+  border-radius: 2rem;
 }
 
 .todo li {
   flex: 1;
-  padding: 0 0.8rem;
 }
 
-/* ===== ACTION BUTTONS ===== */
-.complete-btn,
-.trash-btn {
+.trash-btn, 
+.complete-btn {
+  color: white;
   border: none;
+  padding: 1rem;
   cursor: pointer;
-  font-size: 1.3rem;
-  border-radius: 50%;
-  padding: 0.6rem;
-  color: #fff;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-size: 1.5rem;
 }
 
 .complete-btn {
-  background: #6fbf73;
+  background: #5F749B;
 }
+
+.counter-container{
+  margin-top: 50px;
+  text-align: center;
+}
+
 
 .trash-btn {
-  background: #e57373;
+  border-top-right-radius: 1.75rem;
+  border-bottom-right-radius: 1.75rem;
+  background: rgb(171, 171, 171);
 }
 
-.complete-btn:hover,
-.trash-btn:hover {
-  transform: scale(1.1);
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+.todo-item {
+  padding: 0rem 0.5rem;
 }
 
-/* ===== COMPLETED STATE ===== */
+.fa-trash, 
+.fa-check-circle {
+  pointer-events: none;
+}
+
 .completed {
   text-decoration: line-through;
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
-/* ===== SELECT FILTER ===== */
-.select {
-  margin: 1.5rem 0;
-  position: relative;
-  width: 8rem;
+.slide {
+  transform: translateX(10rem);
+  opacity: 0;
 }
 
 select {
-  width: 100%;
-  padding: 0.7rem 1rem;
-  border-radius: 30px;
-  border: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
   outline: none;
-  background: #f7f8fa;
-  color: #4b6cb7;
-  font-weight: 500;
+  border: none;
+}
+
+.select {
+  margin: 1rem;
+  position: relative;
+  overflow: hidden;
+  border-radius: 50px;
+  height: 2.5rem;
+}
+
+select {
+  color:#87a0cd;
+  width: 6rem;
+  height: 2.7rem;
   cursor: pointer;
-  box-shadow: inset 2px 2px 5px #cdd3e2, inset -2px -2px 5px #ffffff;
+  padding: 1rem;
 }
 
 .select::after {
   content: "\25BC";
   position: absolute;
+  background:#87a0cd;
   top: 0;
   right: 0;
-  padding: 0.7rem 1rem;
-  background: #4b6cb7;
-  color: white;
-  border-radius: 0 30px 30px 0;
+  padding: 1rem;
   pointer-events: none;
-  transition: background 0.3s ease;
+  transition: all 0.3s ease;
 }
 
-.select:hover::after {
-  background: #6c8de9;
+.select::hover::after {
+  background: white;
+  color: #87a0cd;
 }
 
-/* ===== COUNTER ===== */
-.counter-container {
-  margin-top: 2.5rem;
-  text-align: center;
-  font-size: 1.1rem;
-  color: #e8edff;
-}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
-  form {
-    flex-direction: column;
-    gap: 0.8rem;
-  }
-
-  form input {
-    width: 85%;
-    font-size: 1rem;
-  }
-
-  .todo-list {
-    min-width: 80%;
+@media only screen and (max-width: 768px) {
+  form input, 
+  form button,
+  .clear-all-btn{
+    padding: 0.3rem;
+    font-size: 0.8rem;
   }
 
   .todo {
     font-size: 1rem;
-    flex-direction: column;
-    align-items: flex-start;
   }
 
-  .todo li {
-    padding-bottom: 0.5rem;
+  .fa-plus-circle{
+    margin-left: 0.1px;
+
   }
 
-  .complete-btn,
-  .trash-btn {
-    font-size: 1rem;
-    padding: 0.5rem;
+  .select{
+    height:2rem;
+    font-size: 1.2rem;
   }
 
-  .select {
-    width: 6.5rem;
+  .trash-btn, 
+  .complete-btn {
+    padding: 0.8rem;
+    font-size: 1.2rem;
   }
 }
+
+

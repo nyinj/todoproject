@@ -1,24 +1,22 @@
-# Use the official lightweight Python image
-FROM python:3.11-slim
+# -------- STAGE 1: Builder --------
+FROM python:3.11-slim AS builder
 
-# Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# Set the working directory
 WORKDIR /app
 
-# Copy dependencies
-COPY requirements.txt /app/
+COPY requirements.txt .
+RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
 
-# Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# -------- STAGE 2: Runtime --------
+FROM python:3.11-slim
 
-# Copy project files
+WORKDIR /app
+COPY --from=builder /install /usr/local
 COPY . /app/
 
-# Expose the port Django runs on
 EXPOSE 8000
 
-# Run Django server
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8001"]
+# Django runs inside the container on port 8000
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
