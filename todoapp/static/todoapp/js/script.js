@@ -1,14 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
   getTasks();
+
   // attach logout handler if button present
   const logoutButton = document.querySelector('.logout-button');
   if (logoutButton) {
-    logoutButton.addEventListener('click', () => {
-      doLogout();
-    });
+    logoutButton.addEventListener('click', () => doLogout());
   }
+
+  // add listeners
+  const todoButton = document.querySelector('.todo-button');
+  const todoList = document.querySelector('.todo-list');
+  const filterSelect = document.querySelector('.filter-todo');
+  const clearAllBtn = document.querySelector('.clear-all-btn');
+
+  if (todoButton) todoButton.addEventListener('click', addTodo);
+  if (todoList) todoList.addEventListener('click', deleteCheck);
+  if (filterSelect) filterSelect.addEventListener('change', filterTodos);
+  if (clearAllBtn) clearAllBtn.addEventListener('click', clearAllTodos);
 });
 
+/* -------------------- AUTH HELPERS -------------------- */
 function getAccessToken() {
   return localStorage.getItem('access_token');
 }
@@ -21,12 +32,10 @@ function clearTokens() {
 async function apiFetch(url, options = {}) {
   const token = getAccessToken();
   options.headers = options.headers || {};
-  if (token) {
-    options.headers['Authorization'] = 'Bearer ' + token;
-  }
+  if (token) options.headers['Authorization'] = 'Bearer ' + token;
+
   const res = await fetch(url, options);
   if (res.status === 401) {
-    // token invalid/expired — clear tokens and redirect to login
     clearTokens();
     window.location.href = '/login/';
     return;
@@ -34,51 +43,49 @@ async function apiFetch(url, options = {}) {
   return res;
 }
 
+/* -------------------- TODO LOGIC -------------------- */
 const todoInput = document.querySelector('.todo-input');
 const todoList = document.querySelector('.todo-list');
-const todoButton = document.querySelector('.todo-button');
-
-todoButton.addEventListener('click', addTodo);
-todoList.addEventListener('click', deleteCheck);
 
 async function getTasks() {
   const res = await apiFetch('/api/tasks/');
   if (!res) return;
   const tasks = await res.json();
+
   todoList.innerHTML = '';
   tasks.forEach(createTodoElement);
   updateCounters();
 }
 
 function createTodoElement(task) {
-  const todoDiv = document.createElement("div");
-  todoDiv.classList.add("todo");
+  const todoDiv = document.createElement('div');
+  todoDiv.classList.add('todo');
   todoDiv.dataset.id = task.id;
-
-  const newTodo = document.createElement("li");
-  newTodo.innerText = task.title;
-  newTodo.classList.add("todo-item");
   if (task.completed) todoDiv.classList.add('completed');
+
+  const newTodo = document.createElement('li');
+  newTodo.innerText = task.title;
+  newTodo.classList.add('todo-item');
   todoDiv.appendChild(newTodo);
 
-  const completedButton = document.createElement("button");
+  const completedButton = document.createElement('button');
   completedButton.innerHTML = '<i class="fas fa-check-circle"></i>';
-  completedButton.classList.add("complete-btn");
+  completedButton.classList.add('complete-btn');
   todoDiv.appendChild(completedButton);
 
-  const trashButton = document.createElement("button");
+  const trashButton = document.createElement('button');
   trashButton.innerHTML = '<i class="fas fa-trash"></i>';
-  trashButton.classList.add("trash-btn");
+  trashButton.classList.add('trash-btn');
   todoDiv.appendChild(trashButton);
 
   todoList.appendChild(todoDiv);
 }
 
-async function addTodo(event) {
-  event.preventDefault();
+async function addTodo(e) {
+  e.preventDefault();
   const value = todoInput.value.trim();
-  if (value === "") {
-    alert("Please enter a task.");
+  if (!value) {
+    alert('Please enter a task.');
     return;
   }
 
@@ -91,7 +98,7 @@ async function addTodo(event) {
   if (res && res.ok) {
     const task = await res.json();
     createTodoElement(task);
-    todoInput.value = "";
+    todoInput.value = '';
     updateCounters();
   } else {
     console.error('Failed to create task', res && await res.text());
@@ -105,13 +112,11 @@ async function deleteCheck(e) {
   const todo = button.parentElement;
   const id = todo.dataset.id;
 
-  if (button.classList.contains("trash-btn")) {
-    const res = await apiFetch(`/api/tasks/${id}/`, {
-      method: 'DELETE',
-    });
+  if (button.classList.contains('trash-btn')) {
+    const res = await apiFetch(`/api/tasks/${id}/`, { method: 'DELETE' });
     if (res && (res.ok || res.status === 204)) {
-      todo.classList.add("slide");
-      todo.addEventListener("transitionend", function() {
+      todo.classList.add('slide');
+      todo.addEventListener('transitionend', () => {
         todo.remove();
         updateCounters();
       });
@@ -120,30 +125,65 @@ async function deleteCheck(e) {
     }
   }
 
-  if (button.classList.contains("complete-btn")) {
-    const completed = todo.classList.toggle("completed");
+  if (button.classList.contains('complete-btn')) {
+    const completed = todo.classList.toggle('completed');
     await apiFetch(`/api/tasks/${id}/`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ completed: completed })
+      body: JSON.stringify({ completed })
     });
     updateCounters();
   }
 }
 
-// logout helper
+/* -------------------- FILTERING -------------------- */
+function filterTodos(e) {
+  const filter = e.target.value;
+  const todos = document.querySelectorAll('.todo');
+
+  todos.forEach(todo => {
+    switch (filter) {
+      case 'all':
+        todo.style.display = 'flex';
+        break;
+      case 'completed':
+        todo.style.display = todo.classList.contains('completed') ? 'flex' : 'none';
+        break;
+      case 'incomplete':
+        todo.style.display = !todo.classList.contains('completed') ? 'flex' : 'none';
+        break;
+    }
+  });
+}
+
+/* -------------------- CLEAR ALL -------------------- */
+async function clearAllTodos() {
+  const todos = document.querySelectorAll('.todo');
+  for (const todo of todos) {
+    const id = todo.dataset.id;
+    await apiFetch(`/api/tasks/${id}/`, { method: 'DELETE' });
+  }
+  todoList.innerHTML = '';
+  updateCounters();
+}
+
+/* -------------------- LOGOUT -------------------- */
 function doLogout() {
   clearTokens();
-  // optionally inform backend if you have a logout endpoint
   window.location.href = '/login/';
 }
 
-function updateCounters(){
-  // minimal counter update: count total and completed
+/* -------------------- COUNTER -------------------- */
+function updateCounters() {
   const total = document.querySelectorAll('.todo').length;
   const completed = document.querySelectorAll('.todo.completed').length;
-  const counterEl = document.querySelector('.counter-container');
-  if(counterEl){
-    counterEl.innerText = `Total: ${total} — Done: ${completed}`;
+  const uncompleted = total - completed;
+
+  const completedCounter = document.getElementById('completed-counter');
+  const uncompletedCounter = document.getElementById('uncompleted-counter');
+
+  if (completedCounter && uncompletedCounter) {
+    completedCounter.innerText = completed;
+    uncompletedCounter.innerText = uncompleted;
   }
 }
