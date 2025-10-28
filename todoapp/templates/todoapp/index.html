@@ -18,7 +18,26 @@
 <body>
   <header style="display:flex;justify-content:space-between;align-items:center;padding:1rem;">
     <h1>To Do List</h1>
-    <button class="logout-button" style="padding:.5rem 1rem;border-radius:8px;cursor:pointer;">Logout</button>
+    <button class="logout-button" 
+  style="
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  "
+  onmouseover="this.style.background='linear-gradient(135deg,#f87171,#b91c1c)';this.style.transform='translateY(-2px)'"
+  onmouseout="this.style.background='linear-gradient(135deg,#ef4444,#dc2626)';this.style.transform='translateY(0)'"
+>
+  Logout
+</button>
+
   </header>
     <form action="">
         <input type="text" class="todo-input" placeholder="Add task">

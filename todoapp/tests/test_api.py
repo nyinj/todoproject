@@ -2,7 +2,7 @@ from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework import status
 from django.contrib.auth.models import User
-from todoapp.models import Task  # Replace with your actual model if different
+from todoapp.models import Task  
 
 
 class TodoAPITest(APITestCase):
